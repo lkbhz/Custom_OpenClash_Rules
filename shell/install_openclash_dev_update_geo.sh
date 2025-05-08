@@ -2,7 +2,7 @@
 
 # 定义变量
 REPO_API_URL="https://api.github.com/repos/vernesong/OpenClash/contents/dev?ref=package"
-RAW_FILE_PREFIX="https://github.boki.moe/https://raw.githubusercontent.com/vernesong/OpenClash/package/dev"
+RAW_FILE_PREFIX="https://gh-proxy.com/https://raw.githubusercontent.com/vernesong/OpenClash/package/dev"
 TEMP_FILE="openclash.apk"
 
 # 获取 JSON 数据并解析 .apk 文件名
@@ -42,8 +42,9 @@ if [ $? -ne 0 ]; then
 fi
 
 # 执行配置命令
-echo "正在更新配置，切换为 Dev 版本..."
+echo "正在更新配置，切换为 Dev 版本并开启“跳过安全路径检查”..."
 uci set openclash.config.release_branch=dev
+uci set openclash.config.skip_safe_path_check=1
 uci commit openclash
 if [ $? -ne 0 ]; then
   echo "配置更新失败，请检查命令和日志。"
@@ -118,3 +119,6 @@ if [ $? -ne 0 ]; then
 fi
 echo "订阅更新完成！"
 
+sleep 3
+echo "启动 OpenClash ..."
+/etc/init.d/openclash restart
